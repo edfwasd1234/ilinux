@@ -1,0 +1,36 @@
+name: Build iLinux Image
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-utils
+
+      - name: Make build script executable
+        run: chmod +x guest-image/rootfs-builder/build-ilinux-image.sh
+
+      - name: Build iLinux image
+        run: |
+          sudo ./guest-image/rootfs-builder/build-ilinux-image.sh \
+            --version 3.20 \
+            --arch aarch64 \
+            --size 4G \
+            --out ilinux-alpine.qcow2
+
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ilinux-alpine-image
+          path: ilinux-alpine.qcow2
+          retention-days: 7
