@@ -44,8 +44,14 @@ curl -fsSL -o "${WORK}/rootfs.tar.gz.sha256" "${MINIROOTFS_BASE}/${ROOTFS_FILE}.
 
 if [[ -f "${WORK}/rootfs.tar.gz.sha256" ]]; then
   echo ">> Verifying checksum"
-  ( cd "$WORK" && sha256sum -c "rootfs.tar.gz.sha256" \
-      || { echo "!! checksum FAILED" >&2; exit 1; } )
+  EXPECTED=$(awk '{print $1}' "${WORK}/rootfs.tar.gz.sha256")
+  ACTUAL=$(sha256sum "${WORK}/rootfs.tar.gz" | awk '{print $1}')
+  if [[ "$EXPECTED" != "$ACTUAL" ]]; then
+    echo "!! checksum FAILED" >&2
+    exit 1
+  fi
+  echo ">> Checksum OK"
+  
 else
   echo "!! No sha256 found; refusing to continue" >&2
   exit 1
