@@ -51,6 +51,7 @@ if [[ -f "${WORK}/rootfs.tar.gz.sha256" ]]; then
     exit 1
   fi
   echo ">> Checksum OK"
+fi
   
 else
   echo "!! No sha256 found; refusing to continue" >&2
