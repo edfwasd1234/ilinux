@@ -49,8 +49,9 @@ if [[ -f "${WORK}/rootfs.tar.gz.sha256" ]]; then
   if [[ "$EXPECTED" != "$ACTUAL" ]]; then
     echo "!! checksum FAILED" >&2
     exit 1
+  else
+    echo ">> Checksum OK"
   fi
-  echo ">> Checksum OK"
 fi
   
 else
