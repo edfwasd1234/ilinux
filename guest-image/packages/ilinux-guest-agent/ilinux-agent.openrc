@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+name="ilinux-agent"
+description="iLinux guest agent"
+command="/usr/bin/env"
+command_args="python3 /usr/local/bin/ilinux-agent"
+command_background=true
+pidfile="/run/ilinux-agent.pid"
+output_log="/var/log/ilinux-agent.log"
+error_log="/var/log/ilinux-agent.log"
+
+depend() {
+    need localmount
+    after bootmisc
+}
+
+start_pre() {
+    checkpath -d -m 0755 /run/ilinux
+}
